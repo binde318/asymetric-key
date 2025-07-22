@@ -18,5 +18,8 @@ spring:
       hibernate:
         format_sql: false
 
-  app:
-    security:
+app:
+  security:
+    jwt:
+      access-token-expiration: 8640000 # 24 hours for local, but recommend 15 mins for prod.
+      refresh-token-expiration: 684800000
