@@ -34,7 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     @Override
     public AuthenticationResponse login(AuthenticationRequest request) {
@@ -98,7 +98,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     }
     private void checkUserPhoneNumber(final String phoneNumber) {
-        final boolean phoneExist= this.userRepository.existByPhoneNumber(phoneNumber);
+        final boolean phoneExist= this.userRepository.existsByPhoneNumber(phoneNumber);
         if (phoneExist){
             throw new BusinessException(ErrorCode.PHONE_NUMBER_ALREADY_EXIST);
         }

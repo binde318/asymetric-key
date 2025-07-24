@@ -3,7 +3,9 @@ package com.binde.spring_security_asymetric_encryption.user;
 import com.binde.spring_security_asymetric_encryption.auth.request.RegistrationRequest;
 import com.binde.spring_security_asymetric_encryption.user.request.ProfileUpdateRequest;
 import io.micrometer.common.util.StringUtils;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserMapper {
 
     public static User toUser(RegistrationRequest request) {
@@ -24,13 +26,13 @@ public class UserMapper {
 
     public void mergeUserInfo(final User user, final ProfileUpdateRequest request) {
         if (StringUtils.isNotBlank(request.getFirstName())
-                && !user.getFirstName().equals(request.getLastName())) {
+                && !user.getFirstName().equals(request.getFirstName())) {
           user.setFirstName(request.getFirstName());
 
         }
         if (StringUtils.isNotBlank(request.getLastName())
                 && !user.getLastName().equals(request.getLastName())) {
-            user.setLastName(request.getFirstName());
+            user.setLastName(request.getLastName());
 
         }
         if (request.getDateOfBirth() != null
