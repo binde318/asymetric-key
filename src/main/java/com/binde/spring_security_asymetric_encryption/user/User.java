@@ -3,7 +3,6 @@ package com.binde.spring_security_asymetric_encryption.user;
 import com.binde.spring_security_asymetric_encryption.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.engine.internal.Cascade;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -30,7 +29,7 @@ import static jakarta.persistence.GenerationType.UUID;
         @Id
         @GeneratedValue(strategy = UUID)
         private String id;
-        @Column(name = "FISRT_NAME", nullable = false)
+        @Column(name = "FIRST_NAME", nullable = false)
         private String firstName;
         @Column(name = "LAST_NAME", nullable = false)
         private String lastName;
@@ -45,8 +44,8 @@ import static jakarta.persistence.GenerationType.UUID;
         @Column(name = "IS_ACCOUNT_LOCKED")
         private boolean locked;
         @Column(name = "IS_CREDENTIALS_EXPIRED")
-        private boolean expired;
-        @Column(name = "IS_EAMIL_VERIFIED")
+        private boolean credentialsExpired;
+        @Column(name = "IS_EMAIL_VERIFIED")
         private boolean emailVerified;
         @Column(name = "IS_PHONE_VERIFIED")
         private boolean phoneNumberVerified;
@@ -58,14 +57,21 @@ import static jakarta.persistence.GenerationType.UUID;
         @LastModifiedDate
         @Column(name = "LAST_MODIFIED_DATE",insertable = false)
         private LocalDateTime lastModifiedDate;
-      @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-      @JoinTable(
-         name = "USERS_ID",
-           joinColumns = {
-             @JoinColumn(name = "ROLES_ID")
-           }
-      )
-       private List<Role> roles;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles", // This is the name of the join table
+            joinColumns = @JoinColumn(name = "user_id"), // FK to this entity (User)
+            inverseJoinColumns = @JoinColumn(name = "role_id") // FK to Role
+    )
+    private List<Role> roles;
+//      @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+//      @JoinTable(
+//         name = "USERS_ID",
+//           joinColumns = {
+//             @JoinColumn(name = "ROLES_ID")
+//           }
+//      )
+//       private List<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -97,6 +103,6 @@ import static jakarta.persistence.GenerationType.UUID;
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !this.expired;
+        return !this.credentialsExpired;
     }
 }

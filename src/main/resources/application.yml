@@ -1,11 +1,13 @@
 spring:
   application:
     name: spring-security-asymetric-encryption
+  #config:
+    #import: optional:file:.env[properties]
   datasource:
-    url: jdbc:postgresql://${DB_URL}:${DB_PORT}/${DB_NAME}
+    url: jdbc:postgresql://localhost:5432/postgreses
     hikari:
-      password: ${DB_PASSWORD}
-      username: ${DB_USERNAME}
+      password: pass
+      username: postgres
       driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -23,3 +25,4 @@ app:
     jwt:
       access-token-expiration: 8640000 # 24 hours for local, but recommend 15 mins for prod.
       refresh-token-expiration: 684800000
+    disposable-email: 10minutemail, 20minutemail,33mail,5ymail,anonbox, querrillmail etc

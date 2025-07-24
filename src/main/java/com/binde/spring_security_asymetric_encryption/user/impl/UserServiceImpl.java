@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         final User user = this.userRepository.findById(userid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, userid));
         if (!user.isEnabled()){
-            throw new BusinessException(ErrorCode.ACCOUNT_ALREADAY_DEACCTIVATED);
+            throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_DEACTIVATED);
         }
         user.setEnabled(false);
         this.userRepository.save(user);
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
         final  User user = this.userRepository.findById(userid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, userid));
         if (user.isEnabled()){
-            throw new BusinessException(ErrorCode.ACCOUNT_ALREADAY_ACCTIVATED);
+            throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_ACTIVATED);
         }
         user.setEnabled(true);
         this.userRepository.save(user);
