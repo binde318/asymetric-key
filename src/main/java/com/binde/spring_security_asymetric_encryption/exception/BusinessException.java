@@ -1,5 +1,8 @@
 package com.binde.spring_security_asymetric_encryption.exception;
 
+import lombok.Getter;
+
+@Getter
 public class BusinessException extends RuntimeException {
     private final ErrorCode errorCode;
     private final  Object [] args;

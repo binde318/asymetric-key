@@ -62,7 +62,7 @@ return extractClaims(token).getSubject();
 
     private Claims extractClaims(final String token) {
         try {
-            return Jwts.parserBuilder()
+            return Jwts.parser()
                     .verifyWith(this.publicKey)
                     .build()
                     .parseSignedClaims(token)
