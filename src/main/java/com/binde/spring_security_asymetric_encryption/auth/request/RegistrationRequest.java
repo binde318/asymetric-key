@@ -16,7 +16,7 @@ import lombok.*;
 public class RegistrationRequest {
     @NotBlank(message = "VALIDATION.REGISTRATION.FIRSTNAME.NOT_BLANK")
     @Size(
-            min = 5,
+            min = 1,
             max = 56,
             message = "VALIDATION.REGISTRATION.FIRSTNAME.SIZE"
     )
@@ -28,7 +28,7 @@ public class RegistrationRequest {
     private String firstName;
     @NotBlank(message = "VALIDATION.REGISTRATION.LASTNAME.NOT_BLANK")
     @Size(
-            min = 5,
+            min = 1,
             max = 56,
             message = "VALIDATION.REGISTRATION.LASTNAME.SIZE"
     )
@@ -39,7 +39,7 @@ public class RegistrationRequest {
     @Schema(example = "Binde")
     private String lastName;
     @NotBlank(message = "VALIDATION.REGISTRATION.EMAIL.NOT_BLANK" )
-    @Email(message ="VALIDATION.REGISTRATION.EMAIL.FORMAT" )
+    @Email(message ="VALIDATION.REGISTRATION.EMAIL.DISPOSABLE" )
     @NonDisposableEmail(message="VALIDATION.REGISTRATION.EMAIL.DISPOSABLE")
     @Schema(example = "binde@gmail.com")
     private String email;

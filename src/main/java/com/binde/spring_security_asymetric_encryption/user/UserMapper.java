@@ -3,19 +3,24 @@ package com.binde.spring_security_asymetric_encryption.user;
 import com.binde.spring_security_asymetric_encryption.auth.request.RegistrationRequest;
 import com.binde.spring_security_asymetric_encryption.user.request.ProfileUpdateRequest;
 import io.micrometer.common.util.StringUtils;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserMapper {
+    private final PasswordEncoder passwordEncoder;
 
-    public static User toUser(RegistrationRequest request) {
+    public User toUser(RegistrationRequest request) {
 
       return User.builder()
               .firstName(request.getFirstName())
               .lastName(request.getLastName())
               .email(request.getEmail())
               .phoneNumber(request.getPhoneNumber())
-              .password(request.getPassword())
+              .password(this.passwordEncoder.encode(request.getPassword()))
               .enabled(true)
               .locked(false)
               .credentialsExpired(false)

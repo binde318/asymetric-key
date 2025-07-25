@@ -12,7 +12,8 @@ import java.util.Base64;
 public class KeyUtils {
     private KeyUtils(){}
     public static PrivateKey loadPrivateKey(final String pemPath) throws Exception{
-        final String key = readFrompemPath(pemPath).replace("-----BEGIN PRIVATE KEY-----","")
+        final String key = readFrompemPath(pemPath)
+                .replace("-----BEGIN PRIVATE KEY-----","")
                 .replace("-----END PRIVATE KEY-----","")
                 .replaceAll("\\s+","");
         final byte[] decoded = Base64.getDecoder().decode(key);
@@ -20,7 +21,8 @@ public class KeyUtils {
         return KeyFactory.getInstance("RSA").generatePrivate(spec);
     }
     public static PublicKey loadPublicKey(final String pemPath) throws Exception{
-        final String key = readFrompemPath(pemPath).replace("-----BEGIN PUBLIC KEY-----","")
+        final String key = readFrompemPath(pemPath)
+                .replace("-----BEGIN PUBLIC KEY-----","")
                 .replace("-----END PUBLIC KEY-----","")
                 .replaceAll("\\s+","");
         final byte[] decoded = Base64.getDecoder().decode(key);

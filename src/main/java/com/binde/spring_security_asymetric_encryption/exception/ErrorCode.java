@@ -17,8 +17,8 @@ public enum ErrorCode {
     PASSWORD_MISMATCH("PASSWORD_MISMATCH","password mismatch" , BAD_REQUEST),
     ERR_USER_DISABLED("ERR_USER_DISABLED","user disabled" ,UNAUTHORIZED ),
     INVALID_CREDENTIALS("INVALID_CREDENTIALS","invalid user credentials" ,BAD_REQUEST ),
-    USERNAME_NOT_FOUND("USERNAME_NOT_FOUND","User name not found" , BAD_REQUEST),
-    INTERNAL_EXCEPTION("INTERNAL_EXCEPTION","internal exception" ,INTERNAL_SERVER_ERROR );
+    USERNAME_NOT_FOUND("USERNAME_NOT_FOUND","Cannot find user with the provided username" , NOT_FOUND),
+    INTERNAL_EXCEPTION("INTERNAL_EXCEPTION","An internal exception occurred, please try again or contact the admin" ,INTERNAL_SERVER_ERROR );
 
     private final String code;
     private final String defaultMessage;

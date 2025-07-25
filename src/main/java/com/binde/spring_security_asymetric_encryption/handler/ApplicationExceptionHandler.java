@@ -19,15 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.binde.spring_security_asymetric_encryption.exception.ErrorCode.*;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
 @Slf4j
 public class ApplicationExceptionHandler {
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleException(final BusinessException ex) {
+    public ResponseEntity<ErrorResponse> handleException(
+            final BusinessException ex) {
         final ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(ex.getErrorCode().getCode())
                 .message(ex.getMessage())
@@ -47,7 +47,7 @@ public class ApplicationExceptionHandler {
                 .message(ERR_USER_DISABLED.getDefaultMessage())
                 .build();
 
-        return ResponseEntity.status(ERR_USER_DISABLED.getStatus())
+        return ResponseEntity.status(UNAUTHORIZED)
                 .body(body);
     }
 
@@ -58,8 +58,7 @@ public class ApplicationExceptionHandler {
                 .message(INVALID_CREDENTIALS.getDefaultMessage())
                 .code(ErrorCode.INVALID_CREDENTIALS.getCode())
                 .build();
-        return ResponseEntity.status(INVALID_CREDENTIALS.getStatus())
-                .body(body);
+        return new ResponseEntity<>(body, UNAUTHORIZED);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
@@ -79,8 +78,8 @@ public class ApplicationExceptionHandler {
                 .code(ErrorCode.INTERNAL_EXCEPTION.getCode())
                 .message(INTERNAL_EXCEPTION.getDefaultMessage())
                 .build();
-        return ResponseEntity.status(INTERNAL_EXCEPTION.getStatus())
-                .body(response);
+        log.info("");
+        return new ResponseEntity<>(response, INTERNAL_SERVER_ERROR);
 
     }
 
@@ -111,7 +110,7 @@ public class ApplicationExceptionHandler {
         final ErrorResponse response = ErrorResponse.builder()
                 .validationErrors(errors)
                 .build();
-        return ResponseEntity.status(BAD_REQUEST).body(response);
+        return new ResponseEntity<>( response, BAD_REQUEST);
     }
 
 
