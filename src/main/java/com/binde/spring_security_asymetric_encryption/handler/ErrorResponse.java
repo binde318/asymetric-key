@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @ToString
 public class ErrorResponse {
-    private String message;
+    String message;
     private String code;
     private List<ValidationError> validationErrors;
 

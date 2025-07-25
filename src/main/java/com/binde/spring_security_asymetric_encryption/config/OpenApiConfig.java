@@ -29,12 +29,12 @@ import io.swagger.v3.oas.annotations.servers.Server;
         ),
         servers = {
                 @Server(
-                        url = "http://localhost:8080",
+                        url = "http://localhost:8081",
                         description = "Local ENV"
                 ),
                 @Server(
-                        url = "http://localhost:8089",
-                        description = "Development server "
+                        url = "http://localhost:8081",
+                        description = "Development server"
                 )
         },
         security = {

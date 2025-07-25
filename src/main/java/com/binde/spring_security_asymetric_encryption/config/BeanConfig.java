@@ -2,7 +2,6 @@ package com.binde.spring_security_asymetric_encryption.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,7 +22,7 @@ public class BeanConfig {
         return configuration.getAuthenticationManager();
     }
     @Bean
-    public AuditorAware<String> auditorAware(){
+    public ApplicationAuditorAware auditorAware(){
       return new ApplicationAuditorAware();
     }
 }

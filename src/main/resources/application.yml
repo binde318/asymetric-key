@@ -2,7 +2,7 @@ spring:
   application:
     name: spring-security-asymetric-encryption
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgreses
     hikari:
       username: postgres
       password: pass

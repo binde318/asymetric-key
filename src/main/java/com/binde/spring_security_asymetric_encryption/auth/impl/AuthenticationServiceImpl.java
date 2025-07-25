@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 
+import static com.binde.spring_security_asymetric_encryption.exception.ErrorCode.*;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -65,18 +67,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final Role userRole = this.roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new EntityNotFoundException("Role user does not exist"));
 
-        final List<Role> roles = new ArrayList<>();
-        roles.add(userRole);
+       //final List<Role> roles = new ArrayList<>();
+       //roles.add(userRole);
 
-        final User user = UserMapper.toUser(request);
-        user.setRoles(roles);
+        final User user = this.userMapper.toUser(request);
+        user.setRoles(List.of(userRole));
         log.debug("saving user {}", user);
         this.userRepository.save(user);
 
-        final List<User> users = new ArrayList<>();
-        users.add(user);
-        userRole.setUsers(users);
-        this.roleRepository.save(userRole);
+        //final List<User> users = new ArrayList<>();
+        //users.add(user);
+        //userRole.setUsers(users);
+        //this.roleRepository.save(userRole);
     }
 
     @Override
@@ -93,19 +95,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private void checkUserEmail(final String email) {
         final boolean emailExist = this.userRepository.existsByEmailIgnoreCase(email);
         if (emailExist){
-            throw new BusinessException(ErrorCode.EMAIL_ALREADY_EXIST);
+            throw new BusinessException(EMAIL_ALREADY_EXIST);
         }
 
     }
     private void checkUserPhoneNumber(final String phoneNumber) {
         final boolean phoneExist= this.userRepository.existsByPhoneNumber(phoneNumber);
         if (phoneExist){
-            throw new BusinessException(ErrorCode.PHONE_NUMBER_ALREADY_EXIST);
+            throw new BusinessException(PHONE_NUMBER_ALREADY_EXIST);
         }
     }
     private void checkUserPassword(final String password, final String confirmedPassword) {
         if (password == null || !password.equals(confirmedPassword)){
-            throw new BusinessException(ErrorCode.PASSWORD_MISMATCH);
+            throw new BusinessException(PASSWORD_MISMATCH);
         }
     }
 

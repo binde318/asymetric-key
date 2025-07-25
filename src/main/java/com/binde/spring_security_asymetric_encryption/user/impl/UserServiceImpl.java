@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.binde.spring_security_asymetric_encryption.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +27,14 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername( final String userEmail) throws UsernameNotFoundException {
         return this.userRepository.findByEmailIgnoreCase(userEmail).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + userEmail));
     }
     @Override
     public void updateProfileInfo(ProfileUpdateRequest request, String userid) {
         User savedUser = this.userRepository.findById(userid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, userid));
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND, userid));
         this.userMapper.mergeUserInfo(savedUser,request);
         userRepository.save(savedUser);
 
@@ -39,13 +43,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(ChangePasswordRequest request,final String userid) {
     if (!request.getNewPassword().equals(request.getConfirmNewPassword())){
-        throw new BusinessException(ErrorCode.CHANGE_PASSWORD_MISMATCH);
+        throw new BusinessException(CHANGE_PASSWORD_MISMATCH);
     }
    final User savedUser = userRepository.findById(userid)
-           .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, userid));
+           .orElseThrow(() -> new BusinessException(USER_NOT_FOUND, userid));
     if (!this.passwordEncoder.matches(request.getCurrentPassword(),
             savedUser.getPassword())){
-        throw new BusinessException(ErrorCode.INVALID_CURRENT_PASSWORD);
+        throw new BusinessException(INVALID_CURRENT_PASSWORD);
     }
     final String encoded = passwordEncoder.encode(request.getNewPassword());
     savedUser.setPassword(encoded);
@@ -55,9 +59,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deactivateAccount(String userid) {
         final User user = this.userRepository.findById(userid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, userid));
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND, userid));
         if (!user.isEnabled()){
-            throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_DEACTIVATED);
+            throw new BusinessException(ACCOUNT_ALREADY_DEACTIVATED);
         }
         user.setEnabled(false);
         this.userRepository.save(user);
@@ -67,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void reactivateAccount(String userid) {
         final  User user = this.userRepository.findById(userid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, userid));
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND, userid));
         if (user.isEnabled()){
             throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_ACTIVATED);
         }
