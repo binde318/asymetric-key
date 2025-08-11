@@ -16,18 +16,5 @@ public class Application {
 
 		SpringApplication.run(Application.class, args);
 	}
-	@Bean
-	public CommandLineRunner commandLineRunner(final RoleRepository repository){
-		return args -> {
-			final Optional<Role> userRole = repository.findByName("ROLE_USER");
-			if (userRole.isEmpty()){
-				final  Role role = new Role();
-				role.setName("ROLE_USER");
-				role.setCreatedBy("APP");
-				repository.save(role);
-			}
-		};
-
-	}
 
 }

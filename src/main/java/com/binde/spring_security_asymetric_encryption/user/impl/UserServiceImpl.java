@@ -34,19 +34,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfileInfo(ProfileUpdateRequest request, String userid) {
         User savedUser = this.userRepository.findById(userid)
-                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND, userid));
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
         this.userMapper.mergeUserInfo(savedUser,request);
-        userRepository.save(savedUser);
+        this.userRepository.save(savedUser);
 
     }
 
     @Override
-    public void changePassword(ChangePasswordRequest request,final String userid) {
-    if (!request.getNewPassword().equals(request.getConfirmNewPassword())){
+    public void changePassword(final ChangePasswordRequest request,final String userid) {
+    if (!request.getNewPassword()
+            .equals(request.getConfirmNewPassword())){
         throw new BusinessException(CHANGE_PASSWORD_MISMATCH);
     }
    final User savedUser = userRepository.findById(userid)
-           .orElseThrow(() -> new BusinessException(USER_NOT_FOUND, userid));
+           .orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
     if (!this.passwordEncoder.matches(request.getCurrentPassword(),
             savedUser.getPassword())){
         throw new BusinessException(INVALID_CURRENT_PASSWORD);
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deactivateAccount(String userid) {
         final User user = this.userRepository.findById(userid)
-                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND, userid));
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
         if (!user.isEnabled()){
             throw new BusinessException(ACCOUNT_ALREADY_DEACTIVATED);
         }
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void reactivateAccount(String userid) {
         final  User user = this.userRepository.findById(userid)
-                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND, userid));
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
         if (user.isEnabled()){
             throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_ACTIVATED);
         }

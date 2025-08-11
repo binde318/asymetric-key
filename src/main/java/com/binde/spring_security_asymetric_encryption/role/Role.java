@@ -19,9 +19,9 @@ import java.util.List;
 @Table(name = "ROLES")
 @EntityListeners(AuditingEntityListener.class)
 public class Role extends BaseEntity {
-    @Column(name = "NAME", unique = true, nullable = false)
+    @Column(name = "NAME", nullable = false)
     private String name;
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles")
     private List<User> users = new ArrayList<>();
 
 }

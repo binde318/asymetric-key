@@ -5,7 +5,6 @@ import com.binde.spring_security_asymetric_encryption.auth.request.Authenticatio
 import com.binde.spring_security_asymetric_encryption.auth.request.RefreshRequest;
 import com.binde.spring_security_asymetric_encryption.auth.request.RegistrationRequest;
 import com.binde.spring_security_asymetric_encryption.exception.BusinessException;
-import com.binde.spring_security_asymetric_encryption.exception.ErrorCode;
 import com.binde.spring_security_asymetric_encryption.response.AuthenticationResponse;
 import com.binde.spring_security_asymetric_encryption.role.Role;
 import com.binde.spring_security_asymetric_encryption.role.RoleRepository;
@@ -20,11 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.BackingStoreException;
 
 import static com.binde.spring_security_asymetric_encryption.exception.ErrorCode.*;
 
@@ -37,6 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public AuthenticationResponse login(AuthenticationRequest request) {
@@ -67,18 +66,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final Role userRole = this.roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new EntityNotFoundException("Role user does not exist"));
 
-       //final List<Role> roles = new ArrayList<>();
-       //roles.add(userRole);
-
         final User user = this.userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(List.of(userRole));
         log.debug("saving user {}", user);
         this.userRepository.save(user);
-
-        //final List<User> users = new ArrayList<>();
-        //users.add(user);
-        //userRole.setUsers(users);
-        //this.roleRepository.save(userRole);
     }
 
     @Override

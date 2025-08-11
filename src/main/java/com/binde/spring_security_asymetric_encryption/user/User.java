@@ -1,6 +1,7 @@
 package com.binde.spring_security_asymetric_encryption.user;
 
 import com.binde.spring_security_asymetric_encryption.role.Role;
+import com.binde.spring_security_asymetric_encryption.todo.Todo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -72,13 +73,18 @@ public class User implements UserDetails {
         @Column(name = "LAST_MODIFIED_DATE", insertable = false)
         private LocalDateTime lastModifiedDate;
 
-        @ManyToMany(fetch = FetchType.EAGER)
+        @ManyToMany( cascade ={ CascadeType.PERSIST, CascadeType.MERGE},
+        fetch = FetchType.EAGER)
         @JoinTable(
                 name = "USER_ROLES",
-                joinColumns = @JoinColumn(name = "user_id"),
-                inverseJoinColumns = @JoinColumn(name = "role_id")
+                joinColumns ={
+                        @JoinColumn(name = "USERS_ID")},
+                inverseJoinColumns = {@JoinColumn(name = "ROLES_ID")
+                }
         )
-        private List<Role> roles = new ArrayList<>();
+        private List<Role> roles;
+       @OneToMany(mappedBy = "user")
+        private List<Todo> todos;
 
         public void addRole(final Role role) {
             this.roles.add(role);

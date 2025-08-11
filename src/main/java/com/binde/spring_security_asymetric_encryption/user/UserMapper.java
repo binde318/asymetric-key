@@ -26,7 +26,7 @@ public class UserMapper {
               .credentialsExpired(false)
               .emailVerified(false)
               .phoneNumberVerified(false)
-                .build();
+              .build();
     }
 
     public void mergeUserInfo(final User user, final ProfileUpdateRequest request) {
