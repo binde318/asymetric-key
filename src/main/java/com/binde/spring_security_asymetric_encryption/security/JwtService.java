@@ -34,13 +34,15 @@ return buildToken(username,claims, this.accessTokenExpiration);
         final Map<String, Object> claims = Map.of(TOKEN_TYPE,"REFRESH_TOKEN");
         return buildToken(username,claims, this.refreshTokenExpiration);
     }
-    private String buildToken(final String username, final Map<String, Object> claims, long expiration) {
+    private String buildToken(final String username,
+                              final Map<String, Object> claims,
+                              long expiration) {
 
      return Jwts.builder()
-             .setClaims(claims)
-             .setSubject(username)
-             .setIssuedAt(new Date(System.currentTimeMillis()))
-             .setExpiration(new Date(System.currentTimeMillis() + expiration))
+             .claims(claims)
+             .subject(username)
+             .issuedAt(new Date(System.currentTimeMillis()))
+             .expiration(new Date(System.currentTimeMillis() + expiration))
              .signWith(this.privateKey)
              .compact();
     }

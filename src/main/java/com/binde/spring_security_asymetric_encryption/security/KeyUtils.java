@@ -15,7 +15,7 @@ public class KeyUtils {
         final String key = readFrompemPath(pemPath)
                 .replace("-----BEGIN PRIVATE KEY-----","")
                 .replace("-----END PRIVATE KEY-----","")
-                .replaceAll("\\s+","");
+                .replaceAll("\\s","");
         final byte[] decoded = Base64.getDecoder().decode(key);
         final PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decoded);
         return KeyFactory.getInstance("RSA").generatePrivate(spec);
@@ -24,7 +24,7 @@ public class KeyUtils {
         final String key = readFrompemPath(pemPath)
                 .replace("-----BEGIN PUBLIC KEY-----","")
                 .replace("-----END PUBLIC KEY-----","")
-                .replaceAll("\\s+","");
+                .replaceAll("\\s","");
         final byte[] decoded = Base64.getDecoder().decode(key);
         final X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
         return KeyFactory.getInstance("RSA").generatePublic(spec);

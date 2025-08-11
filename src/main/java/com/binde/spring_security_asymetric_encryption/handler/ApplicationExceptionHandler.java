@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,7 +33,7 @@ public class ApplicationExceptionHandler {
                 .code(ex.getErrorCode().getCode())
                 .message(ex.getMessage())
                 .build();
-        log.info("Business exception {}", ex.getMessage());
+        log.info("Business Exception: {}", errorResponse);
         log.debug(ex.getMessage(), ex);
         return ResponseEntity.status(ex.getErrorCode()
                         .getStatus() != null ? ex.getErrorCode()
@@ -78,7 +79,7 @@ public class ApplicationExceptionHandler {
                 .code(ErrorCode.INTERNAL_EXCEPTION.getCode())
                 .message(INTERNAL_EXCEPTION.getDefaultMessage())
                 .build();
-        log.info("");
+        log.info("This is a wrong password");
         return new ResponseEntity<>(response, INTERNAL_SERVER_ERROR);
 
     }
@@ -113,5 +114,12 @@ public class ApplicationExceptionHandler {
         return new ResponseEntity<>( response, BAD_REQUEST);
     }
 
-
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleException(final AuthorizationDeniedException ex) {
+        log.debug(ex.getMessage(), ex);
+        final ErrorResponse response = ErrorResponse.builder()
+                .message("You are not authorized to perform this operation")
+                .build();
+        return new ResponseEntity<>(response, UNAUTHORIZED);
+    }
 }

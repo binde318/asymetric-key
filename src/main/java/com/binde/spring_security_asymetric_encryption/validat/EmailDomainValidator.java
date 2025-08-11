@@ -27,8 +27,8 @@ public class EmailDomainValidator implements ConstraintValidator<NonDisposableEm
         if (email == null || !email.contains("@")){
             return true;
         }
-        final int atIndex = email.indexOf("@") + 1;
-        final int dotIndex = email.lastIndexOf(".");
+        final int atIndex = email.indexOf('@') + 1;
+        final int dotIndex = email.lastIndexOf('.');
         final String domain = email.substring(atIndex,dotIndex);
         return !this.blocked.contains(domain);
     }

@@ -18,7 +18,8 @@ public enum ErrorCode {
     ERR_USER_DISABLED("ERR_USER_DISABLED","user disabled" ,UNAUTHORIZED ),
     INVALID_CREDENTIALS("INVALID_CREDENTIALS","invalid user credentials" ,BAD_REQUEST ),
     USERNAME_NOT_FOUND("USERNAME_NOT_FOUND","Cannot find user with the provided username" , NOT_FOUND),
-    INTERNAL_EXCEPTION("INTERNAL_EXCEPTION","An internal exception occurred, please try again or contact the admin" ,INTERNAL_SERVER_ERROR );
+    INTERNAL_EXCEPTION("INTERNAL_EXCEPTION","An internal exception occurred, please try again or contact the admin" ,INTERNAL_SERVER_ERROR ),
+    CATEGORY_ALREADY_EXIST_FOR_THIS_USER("CATEGORY_ALREADY_EXIST_FOR_THIS_USER","category_already_exist_for_this_user" ,CONFLICT );
 
     private final String code;
     private final String defaultMessage;
